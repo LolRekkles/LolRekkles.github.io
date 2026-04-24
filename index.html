@@ -430,59 +430,212 @@ section{position:relative;padding:120px 60px;overflow:hidden}
 }
 
 /* ---------- SKILLS ---------- */
-.skills{background:var(--black);color:#fff}
+.skills{
+  background:var(--black);
+  color:#fff;
+  position:relative;
+  overflow:hidden;
+}
+/* diagonal red accent band - decorative, left edge */
+.skills::before{
+  content:'';
+  position:absolute;
+  top:-10%;left:-15%;
+  width:30%;height:45%;
+  background:var(--red);
+  transform:skewY(-14deg);
+  opacity:.95;
+  z-index:0;
+  pointer-events:none;
+}
+/* faint grid lines across the whole section for tech texture */
+.skills::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+  z-index:0;
+}
+.skills>*{position:relative;z-index:1}
 .skills .section-label .name{color:#fff}
 .skills .section-label .line{background:#fff}
 .skills .section-title em{color:var(--red)}
+
 .skill-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
   gap:24px;
-}
-.skill-card{
-  background:#1a1a1a;
-  border:2px solid #2a2a2a;
-  padding:32px 26px;
   position:relative;
-  transition:transform .25s cubic-bezier(.7,0,.3,1);
+  z-index:1;
 }
+
+.skill-card{
+  background:#141414;
+  border:2px solid #2a2a2a;
+  padding:36px 28px 32px;
+  position:relative;
+  overflow:hidden;
+  transition:transform .35s cubic-bezier(.7,0,.3,1),
+             border-color .3s,
+             background .3s;
+  clip-path:polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+}
+
+/* red sweep that fills the card on hover */
 .skill-card::before{
   content:'';
   position:absolute;
-  top:-2px;left:-2px;
-  width:40px;height:40px;
+  top:0;left:-10%;
+  width:0;height:100%;
   background:var(--red);
-  clip-path:polygon(0 0,100% 0,0 100%);
+  transform:skewX(-18deg);
+  transition:width .45s cubic-bezier(.7,0,.3,1);
+  z-index:0;
 }
+.skill-card:hover::before{width:130%}
+
+/* corner triangle grows on hover */
+.skill-card::after{
+  content:'';
+  position:absolute;
+  top:0;right:0;
+  width:32px;height:32px;
+  background:var(--red);
+  clip-path:polygon(100% 0, 0 0, 100% 100%);
+  transition:width .3s cubic-bezier(.7,0,.3,1), height .3s cubic-bezier(.7,0,.3,1);
+  z-index:2;
+}
+.skill-card:hover::after{
+  width:52px;height:52px;
+  background:#fff;
+}
+
+.skill-card>*{position:relative;z-index:1}
+
 .skill-card:hover{
-  transform:translate(-4px,-4px);
+  transform:translate(-5px,-5px);
   border-color:var(--red);
 }
+
+/* tag on top-left */
+.skill-card .tag{
+  position:absolute;
+  top:0;left:0;
+  background:var(--red);
+  color:#fff;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:2px;
+  padding:5px 14px 5px 12px;
+  clip-path:polygon(0 0, 100% 0, 92% 100%, 0 100%);
+  z-index:3;
+  transition:background .3s, color .3s;
+}
+.skill-card:hover .tag{
+  background:#fff;
+  color:var(--red);
+}
+
 .skill-card .icon{
   font-family:'Archivo Black',sans-serif;
-  font-size:28px;
+  font-size:30px;
   color:var(--red);
-  margin-bottom:14px;
+  margin:18px 0 16px;
   letter-spacing:2px;
+  display:inline-block;
+  transform:skewX(-8deg);
+  transition:color .3s, transform .3s;
 }
+.skill-card:hover .icon{
+  color:#fff;
+  transform:skewX(-8deg) translateX(4px);
+}
+
 .skill-card h3{
   font-family:'Oswald',sans-serif;
   font-weight:700;
-  font-size:20px;
+  font-size:21px;
   letter-spacing:2px;
   text-transform:uppercase;
-  margin-bottom:14px;
+  margin-bottom:16px;
+  padding-bottom:12px;
+  border-bottom:2px solid #2a2a2a;
+  transition:border-color .3s, color .3s;
 }
+.skill-card:hover h3{
+  border-color:rgba(255,255,255,.4);
+  color:#fff;
+}
+
 .skill-card ul{
   list-style:none;
   font-family:'JetBrains Mono',monospace;
   font-size:13px;
   line-height:1.9;
-  color:#ccc;
+  color:#bbb;
+  transition:color .3s;
 }
+.skill-card:hover ul{color:#fff}
+.skill-card li{
+  transition:transform .3s cubic-bezier(.7,0,.3,1);
+}
+.skill-card:hover li{transform:translateX(4px)}
+.skill-card:hover li:nth-child(2){transition-delay:.04s}
+.skill-card:hover li:nth-child(3){transition-delay:.08s}
+.skill-card:hover li:nth-child(4){transition-delay:.12s}
+
 .skill-card li::before{
   content:'▸ ';
   color:var(--red);
+  transition:color .3s;
+}
+.skill-card:hover li::before{color:#fff}
+
+/* animated scan line across cards - subtle, always running */
+.skill-card .scan{
+  position:absolute;
+  top:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent, var(--red), transparent);
+  opacity:0;
+  animation:scan 4s linear infinite;
+  pointer-events:none;
+  z-index:2;
+}
+.skill-card:nth-child(2) .scan{animation-delay:.7s}
+.skill-card:nth-child(3) .scan{animation-delay:1.4s}
+.skill-card:nth-child(4) .scan{animation-delay:2.1s}
+.skill-card:nth-child(5) .scan{animation-delay:2.8s}
+.skill-card:nth-child(6) .scan{animation-delay:3.5s}
+
+@keyframes scan{
+  0%{transform:translateY(0);opacity:0}
+  5%{opacity:.7}
+  50%{opacity:.7}
+  95%{opacity:.7}
+  100%{transform:translateY(320px);opacity:0}
+}
+
+/* staggered alternating float-in */
+.skill-card.reveal{
+  opacity:0;
+  transform:translateY(40px) rotate(-1deg);
+  transition:opacity .7s cubic-bezier(.7,0,.3,1),
+             transform .7s cubic-bezier(.7,0,.3,1),
+             border-color .3s,
+             background .3s;
+}
+.skill-card.reveal:nth-child(even){
+  transform:translateY(40px) rotate(1deg);
+}
+.skill-card.reveal.on{
+  opacity:1;
+  transform:translateY(0) rotate(0);
 }
 
 /* ---------- PROJECTS ---------- */
@@ -808,7 +961,7 @@ footer .red{color:var(--red)}
         </div>
         <div>
           <div class="card-name">SATHYA<br><span class="crimson">CODENAME</span></div>
-          <div class="card-role">Digital Design · Embedded </div>
+          <div class="card-role">Digital Design · Embedded · CIM</div>
         </div>
         <div class="card-kanji">怪盗</div>
       </div>
@@ -866,6 +1019,8 @@ footer .red{color:var(--red)}
 
   <div class="skill-grid">
     <div class="skill-card reveal">
+      <span class="tag">SKILL / 01</span>
+      <span class="scan"></span>
       <div class="icon">◆ RTL</div>
       <h3>Digital Design</h3>
       <ul>
@@ -876,6 +1031,8 @@ footer .red{color:var(--red)}
       </ul>
     </div>
     <div class="skill-card reveal">
+      <span class="tag">SKILL / 02</span>
+      <span class="scan"></span>
       <div class="icon">◆ FPGA</div>
       <h3>FPGA / HLS</h3>
       <ul>
@@ -886,6 +1043,8 @@ footer .red{color:var(--red)}
       </ul>
     </div>
     <div class="skill-card reveal">
+      <span class="tag">SKILL / 03</span>
+      <span class="scan"></span>
       <div class="icon">◆ DFT</div>
       <h3>Hardware Dependability</h3>
       <ul>
@@ -896,6 +1055,8 @@ footer .red{color:var(--red)}
       </ul>
     </div>
     <div class="skill-card reveal">
+      <span class="tag">SKILL / 04</span>
+      <span class="scan"></span>
       <div class="icon">◆ EMB</div>
       <h3>Embedded Systems</h3>
       <ul>
@@ -906,6 +1067,8 @@ footer .red{color:var(--red)}
       </ul>
     </div>
     <div class="skill-card reveal">
+      <span class="tag">SKILL / 05</span>
+      <span class="scan"></span>
       <div class="icon">◆ ML</div>
       <h3>ML / Acceleration</h3>
       <ul>
@@ -916,6 +1079,8 @@ footer .red{color:var(--red)}
       </ul>
     </div>
     <div class="skill-card reveal">
+      <span class="tag">SKILL / 06</span>
+      <span class="scan"></span>
       <div class="icon">◆ SW</div>
       <h3>Software</h3>
       <ul>
