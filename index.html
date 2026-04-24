@@ -650,15 +650,19 @@ footer .red{color:var(--red)}
     padding:110px 40px 60px;
     gap:50px;
   }
+  /* red panel moves to BOTTOM half - behind the ID card, not the headline */
   .hero-bg::before{
-    top:-5%;right:-10%;
-    width:90%;height:45%;
-    transform:skewY(-6deg);
+    top:auto;bottom:-5%;right:-10%;left:auto;
+    width:120%;height:52%;
+    transform:skewY(-5deg);
+    transform-origin:bottom right;
   }
+  /* black accent - bottom-left corner, decorative */
   .hero-bg::after{
-    top:-5%;right:-10%;
-    width:40%;height:25%;
-    transform:skewY(-6deg);
+    top:auto;bottom:-2%;left:-5%;right:auto;
+    width:35%;height:20%;
+    transform:skewY(-5deg);
+    transform-origin:bottom left;
   }
   .hero-visual{order:2}
   .card-stack{width:min(360px,80%)}
